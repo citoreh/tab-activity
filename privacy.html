@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tab Activity — Privacy Policy</title>
+<meta name="description" content="Privacy policy for the Tab Activity Chrome extension. No data collection: everything stays on your device.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#10141d; --surface:#161b27; --line:#232a3a;
+    --brass:#c9a15a; --brass-dim:#8a7344; --ink:#e8e4da; --muted:#6b7383;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:'IBM Plex Mono',ui-monospace,monospace; font-weight:300;
+    font-size:14px; line-height:1.95;
+    max-width:760px; margin:0 auto; padding:48px clamp(20px,5vw,48px) 96px;
+  }
+  h1,h2{font-family:'Marcellus',Georgia,serif;font-weight:400;letter-spacing:.04em}
+  h1{font-size:30px;margin:40px 0 6px}
+  h1 span{color:var(--brass)}
+  .meta{color:var(--muted);font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:44px}
+  h2{font-size:19px;margin:44px 0 14px;padding-top:28px;border-top:1px solid var(--line)}
+  p{color:var(--muted);margin-bottom:14px}
+  p strong{color:var(--ink);font-weight:400}
+  a{color:var(--brass);text-decoration:none;border-bottom:1px solid var(--brass-dim)}
+  a:hover{border-bottom-color:var(--brass)}
+  .back{font-size:11px;letter-spacing:.14em;text-transform:uppercase;border:none;color:var(--muted)}
+  .back:hover{color:var(--brass)}
+  dl{margin:6px 0 14px}
+  dt{color:var(--ink);margin-top:14px}
+  dd{color:var(--muted);margin-left:0}
+  footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--line);
+         color:var(--muted);font-size:11px;letter-spacing:.1em}
+  footer i{font-style:normal;color:var(--brass-dim)}
+</style>
+</head>
+<body>
+
+<a class="back" href="index.html">← Tab Activity</a>
+<h1>Privacy <span>Policy</span></h1>
+<p class="meta">Tab Activity browser extension · Effective 4 July 2026</p>
+
+<p><strong>The short version: Tab Activity collects nothing.</strong> It has no
+server, makes no network requests, and never transmits any data anywhere.
+Everything it records is stored locally in your browser, on your device,
+under your control.</p>
+
+<h2>What the extension records, and where it lives</h2>
+<p>Tab Activity's single purpose is to measure the time you actively spend on
+websites and show it back to you. To do that, it records <strong>attention
+sessions</strong>: which site's tab was focused, from when to when. Each session
+stores the site's domain (for example <strong>youtube.com</strong> — never the
+full page URL), the tab's title, and start and end times.</p>
+<p>All of this is written exclusively to your browser's local storage on your
+device (IndexedDB and the Chrome extension storage API). It is never sent
+anywhere, because the extension contains no networking code and requests no
+host permissions to access website content.</p>
+<p>Page titles are kept for a maximum of 7 days to power the daily view, then
+discarded. Long-term history keeps only per-day totals per domain: date, domain,
+total focused time, session count, and longest session.</p>
+
+<h2>What the extension does not do</h2>
+<dl>
+  <dt>No transmission</dt>
+  <dd>No data ever leaves your device. There is no server, sync, backup, or account.</dd>
+  <dt>No analytics or telemetry</dt>
+  <dd>No usage statistics, crash reports, or tracking of any kind — of your browsing or of your use of the extension itself.</dd>
+  <dt>No page content</dt>
+  <dd>The extension never reads, injects into, or modifies the pages you visit. It does not request permission to access website content.</dd>
+  <dt>No full URLs</dt>
+  <dd>Only the site's domain is recorded, never the specific page address, query parameters, or anything within the page.</dd>
+  <dt>No incognito tracking</dt>
+  <dd>The extension does not run in incognito windows unless you explicitly enable that in Chrome's extension settings, and it is not designed to be enabled there.</dd>
+  <dt>No third parties</dt>
+  <dd>No third-party code, SDKs, ad networks, or data brokers are involved. Nothing is sold or shared, because nothing is collected.</dd>
+</dl>
+
+<h2>Permissions, explained</h2>
+<p>Chrome asks you to grant the extension a small set of permissions. Here is
+exactly why each one is needed:</p>
+<dl>
+  <dt>tabs</dt>
+  <dd>To know which tab is focused and the domain and title of that tab. This is the core measurement.</dd>
+  <dt>idle</dt>
+  <dd>To pause the clock when you step away from the keyboard, so idle time is not counted as attention.</dd>
+  <dt>alarms</dt>
+  <dd>To run a once-a-minute heartbeat (so sessions are truncated correctly if your machine sleeps) and a nightly aggregation of raw sessions into daily totals.</dd>
+  <dt>storage</dt>
+  <dd>To save your settings and keep track of the current session locally.</dd>
+  <dt>notifications</dt>
+  <dd>To show at most one notification per day per limit, if — and only if — you choose to set daily time limits. No limits, no notifications.</dd>
+</dl>
+
+<h2>Your controls</h2>
+<p>From the extension's Options page you can: exclude any domain from ever being
+recorded; delete the recorded history of a single domain; hide domains from the
+dashboard; export all of your data as JSON or CSV; and delete all recorded data
+at once. Uninstalling the extension removes its stored data from your browser.</p>
+<p>Because there is no copy of your data anywhere else, deletion is genuinely
+final — and if you move to a new machine, your history does not follow unless
+you export it yourself.</p>
+
+<h2>Children</h2>
+<p>Tab Activity does not collect personal information from anyone, including
+children.</p>
+
+<h2>Changes to this policy</h2>
+<p>If a future version ever changes how data is handled, this page will be
+updated and the effective date revised before that version is published. The
+promise that defines this extension — <strong>no data leaves your device</strong> —
+is not planned to change; a version that broke it would be a different product.</p>
+
+<h2>Contact</h2>
+<p>Questions about this policy or the extension can be raised on the project's
+GitHub repository issues page.</p>
+
+<footer>TAB ACTIVITY · ALL DATA LIVES IN YOUR BROWSER · <i>NOTHING LEAVES YOUR MACHINE</i></footer>
+
+</body>
+</html>

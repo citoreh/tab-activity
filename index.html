@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tab Activity — where your attention actually went</title>
+<meta name="description" content="A beautiful, private time dial for your browsing. Tab Activity tracks the time you actively spend on websites — entirely on your device. Nothing leaves your machine.">
+<meta property="og:title" content="Tab Activity — where your attention actually went">
+<meta property="og:description" content="A private attention dial for your browser. All data stays on your device.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#10141d; --surface:#161b27; --line:#232a3a;
+    --brass:#c9a15a; --brass-dim:#8a7344;
+    --ink:#e8e4da; --muted:#6b7383; --dial-guide:#1d2433; --warn:#c77d8a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:'IBM Plex Mono',ui-monospace,monospace; font-weight:300;
+    font-size:14px; line-height:1.9;
+  }
+  h1,h2,h3{font-family:'Marcellus',Georgia,serif;font-weight:400;letter-spacing:.04em}
+  a{color:var(--brass);text-decoration:none;border-bottom:1px solid var(--brass-dim)}
+  a:hover{border-bottom-color:var(--brass)}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 clamp(20px,5vw,48px)}
+
+  /* ---------- header ---------- */
+  .top{
+    display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:12px;
+    padding:28px 0;border-bottom:1px solid var(--line);
+  }
+  .top .brand{font-family:'Marcellus',Georgia,serif;font-size:19px;letter-spacing:.04em}
+  .top .brand span{color:var(--brass)}
+  .top nav{display:flex;gap:26px;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+  .top nav a{color:var(--muted);border:none}
+  .top nav a:hover{color:var(--brass)}
+
+  /* ---------- hero ---------- */
+  .hero{
+    display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);
+    gap:56px;align-items:center;padding:88px 0 72px;
+  }
+  @media(max-width:880px){.hero{grid-template-columns:1fr;padding:56px 0 40px}}
+  .hero h1{font-size:clamp(34px,4.6vw,52px);line-height:1.2;margin-bottom:26px}
+  .hero h1 em{font-style:normal;color:var(--brass)}
+  .hero p.lede{color:var(--muted);max-width:44ch;margin-bottom:36px}
+  .cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .btn{
+    display:inline-block;border:1px solid var(--brass-dim);color:var(--brass);
+    font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    padding:13px 26px;border-radius:2px;
+  }
+  .btn:hover{border-color:var(--brass)}
+  .btn.solid{background:var(--brass);color:var(--bg);border-color:var(--brass)}
+  .btn.solid:hover{background:var(--ink);border-color:var(--ink)}
+  .hero .fine{margin-top:22px;font-size:11px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+  .hero .fine i{font-style:normal;color:var(--brass-dim)}
+  .dialbox svg{width:100%;height:auto;display:block}
+
+  /* ---------- sections ---------- */
+  section{padding:76px 0;border-top:1px solid var(--line)}
+  .eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass-dim);margin-bottom:14px}
+  section h2{font-size:clamp(24px,3vw,32px);margin-bottom:22px;max-width:24ch}
+  section p{max-width:66ch;color:var(--muted)}
+  section p strong{color:var(--ink);font-weight:400}
+  section p + p{margin-top:18px}
+
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:56px}
+  @media(max-width:880px){.cols{grid-template-columns:1fr}}
+
+  /* feature rows */
+  .feature{display:grid;grid-template-columns:200px 1fr;gap:32px;padding:30px 0;border-top:1px solid var(--line)}
+  .feature:first-of-type{border-top:none;padding-top:8px}
+  @media(max-width:700px){.feature{grid-template-columns:1fr;gap:8px}}
+  .feature h3{font-size:18px;color:var(--ink)}
+  .feature p{font-size:13px}
+
+  /* themes strip */
+  .themes{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px;margin-top:36px}
+  .theme{border:1px solid var(--line);border-radius:4px;overflow:hidden}
+  .theme .sw{height:96px;position:relative}
+  .theme .sw i{position:absolute;border-radius:50%;border:2px solid}
+  .theme .sw .r1{inset:14px auto auto 18px;width:52px;height:52px}
+  .theme .sw .r2{inset:30px auto auto 34px;width:20px;height:20px}
+  .theme .sw .hand{position:absolute;left:44px;top:40px;width:34px;height:2px;transform:rotate(-32deg);transform-origin:left}
+  .theme .nm{padding:12px 16px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);border-top:1px solid var(--line)}
+
+  /* privacy block */
+  .privacy-card{
+    border:1px solid var(--brass-dim);border-radius:4px;padding:36px clamp(22px,4vw,44px);
+    background:var(--surface);margin-top:34px;
+  }
+  .privacy-card p{color:var(--ink)}
+  .privacy-card .rule{color:var(--muted);font-size:13px;margin-top:16px}
+
+  /* install steps */
+  .steps{counter-reset:st;margin-top:30px;max-width:66ch}
+  .steps div{
+    counter-increment:st;padding:16px 0 16px 58px;position:relative;
+    border-top:1px solid var(--line);color:var(--muted);font-size:13px;
+  }
+  .steps div::before{
+    content:counter(st,decimal-leading-zero);
+    position:absolute;left:0;top:14px;
+    font-family:'Marcellus',Georgia,serif;font-size:20px;color:var(--brass-dim);
+  }
+  .steps div strong{color:var(--ink);font-weight:400}
+
+  footer{border-top:1px solid var(--line);padding:44px 0 64px;color:var(--muted);font-size:11px;letter-spacing:.1em}
+  footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  footer i{font-style:normal;color:var(--brass-dim)}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">Tab <span>Activity</span></div>
+    <nav>
+      <a href="#how">How it works</a>
+      <a href="#features">Features</a>
+      <a href="#privacy">Privacy</a>
+      <a href="#install">Install</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <div>
+      <h1>Where your attention <em>actually</em> went.</h1>
+      <p class="lede">Tab Activity draws your browsing day as an instrument —
+      a 24-hour dial where every ring is a site and every arc is a stretch of
+      real, focused attention. Not tabs left open. Attention.</p>
+      <div class="cta">
+        <a class="btn solid" href="#install">Add to Chrome</a>
+        <a class="btn" href="#privacy">Read the privacy promise</a>
+      </div>
+      <p class="fine">FREE · NO ACCOUNT · <i>NOTHING LEAVES YOUR MACHINE</i></p>
+    </div>
+    <div class="dialbox">
+      <svg id="dial" viewBox="0 0 720 720" role="img"
+        aria-label="A 24-hour dial showing a day of browsing as colored arcs on concentric rings"></svg>
+    </div>
+  </div>
+</div>
+
+<section id="how">
+  <div class="wrap cols">
+    <div>
+      <p class="eyebrow">The idea</p>
+      <h2>A tab being open is not the same as you being there.</h2>
+    </div>
+    <div>
+      <p>Most time trackers count how long a tab existed — so twenty pinned tabs
+      all report eight hours, and the numbers mean nothing. Tab Activity measures
+      something stricter: <strong>a site only earns time while its tab is focused,
+      its window is focused, and you are actually active</strong> at the keyboard
+      or mouse.</p>
+      <p>Walk away and the clock pauses. Watch a film fullscreen and it doesn't —
+      the one exception is media you're plausibly watching. What's left is an
+      honest record of your attention, drawn beautifully enough that you'll
+      actually look at it.</p>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="wrap">
+    <p class="eyebrow">What's inside</p>
+    <h2>One dial today. A heatmap for the week. A texture for the year.</h2>
+
+    <div class="feature">
+      <h3>The attention dial</h3>
+      <p>Your day on a 24-hour face: midnight at the top, each site on its own ring,
+      each focused session a luminous arc. Hover any arc for the page title and
+      exact times. A brass hand marks now, and the centre keeps your running total.</p>
+    </div>
+    <div class="feature">
+      <h3>The film strip</h3>
+      <p>The same day laid flat — every session a frame, in order. The gaps are
+      usually the most interesting part.</p>
+    </div>
+    <div class="feature">
+      <h3>Week, month, year</h3>
+      <p>A 7×24 heatmap shows when in the week your attention burns brightest,
+      with peak-hour and busiest-day stats. Month and year views stack each day
+      into colored bars until your history reads like a texture.</p>
+    </div>
+    <div class="feature">
+      <h3>Categories</h3>
+      <p>Tag domains as Work, Learning, Entertainment — whatever fits your life —
+      and flip any view to read by intent instead of by site.</p>
+    </div>
+    <div class="feature">
+      <h3>Limits that respect you</h3>
+      <p>Set a daily allowance per site, or one budget for everything. Cross it and
+      you get a single quiet notification — once, not a nag. Tab Activity warns;
+      it never blocks. The choice stays yours, and the overshoot stays on the record.</p>
+    </div>
+    <div class="feature">
+      <h3>Your data, your controls</h3>
+      <p>Exclude sites from tracking entirely, hide them from view, purge a single
+      domain's history, export everything as JSON or CSV, or wipe it all. A badge
+      on the toolbar icon can show today's total, if you want a glanceable conscience.</p>
+    </div>
+
+    <p class="eyebrow" style="margin-top:64px">Four instruments</p>
+    <h2 style="max-width:none">Noir · Dawn · Sea · Forest</h2>
+    <div class="themes" id="themes"></div>
+  </div>
+</section>
+
+<section id="privacy">
+  <div class="wrap">
+    <p class="eyebrow">Privacy</p>
+    <h2>A tracker you don't have to trust — because it can't tell anyone.</h2>
+    <p>An extension that watches your browsing should make you suspicious.
+    Here is why this one doesn't need your trust, only your inspection:</p>
+    <div class="privacy-card">
+      <p><strong>Tab Activity makes no network requests. Ever.</strong></p>
+      <p class="rule">Everything is stored in your browser's local database (IndexedDB) on your device.
+      There is no server, no account, no sync, no analytics, no telemetry, and no third-party code.</p>
+      <p class="rule">Only the <strong>site domain</strong> is kept long-term — youtube.com,
+      never the 300-character URL of what you watched. Page titles are held for at most
+      7 days for the day view, then discarded in the nightly rollup.</p>
+      <p class="rule">Incognito windows are never tracked. Excluded domains are never recorded.
+      Deleting your data deletes it — there is no copy anywhere else, which also means:
+      export before you switch machines, or it stays behind.</p>
+      <p class="rule">The source is readable — no build step, no minification.
+      Open the extension folder and read exactly what runs.</p>
+    </div>
+    <p style="margin-top:26px">The full policy lives at <a href="privacy.html">privacy.html</a> —
+    the same document linked from the Chrome Web Store listing.</p>
+  </div>
+</section>
+
+<section id="install">
+  <div class="wrap">
+    <p class="eyebrow">Install</p>
+    <h2>Two ways in.</h2>
+    <div class="steps">
+      <div><strong>From the Chrome Web Store</strong> — one click:
+        <a href="#">Tab Activity on the Web Store</a>. <em>(link goes live on approval)</em></div>
+      <div><strong>Or load it yourself</strong> — download the source from
+        <a href="#">GitHub</a>, open <strong>chrome://extensions</strong>,
+        switch on Developer mode, choose <strong>Load unpacked</strong>,
+        and point it at the folder.</div>
+      <div><strong>Then browse.</strong> Pin the icon, do some real work,
+        and click the little brass dial when you're curious. The day draws itself.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>TAB ACTIVITY · MADE IN LONDON</span>
+    <span><a href="privacy.html" style="color:var(--muted);border:none">PRIVACY</a> · ALL DATA LIVES IN YOUR BROWSER · <i>NOTHING LEAVES YOUR MACHINE</i></span>
+  </div>
+</footer>
+
+<script>
+/* ---------- live sample-day dial (same renderer as the product) ---------- */
+const RAW = [
+  ["x.com", 8.55, 11], ["github.com", 8.80, 34], ["claude.ai", 9.40, 26],
+  ["github.com", 9.90, 52], ["youtube.com", 10.85, 14], ["github.com", 11.15, 41],
+  ["docs.google.com", 11.90, 22], ["x.com", 12.30, 8], ["youtube.com", 13.10, 37],
+  ["claude.ai", 13.80, 44], ["github.com", 14.60, 63], ["en.wikipedia.org", 15.70, 18],
+  ["github.com", 16.05, 48], ["docs.google.com", 16.95, 15], ["youtube.com", 17.30, 26],
+  ["claude.ai", 17.85, 31], ["x.com", 18.40, 7],
+];
+const PALETTE = ["#5aa39b", "#b06a4f", "#c77d8a", "#7a8fc9", "#a3a35a", "#8a6fae", "#5f8dab"];
+const sessions = RAW.map(([d, h, m]) => ({ domain: d, start: h, end: h + m / 60 }));
+const totals = new Map();
+for (const s of sessions) totals.set(s.domain, (totals.get(s.domain) ?? 0) + (s.end - s.start));
+const ranked = [...totals.entries()].sort((a, b) => b[1] - a[1]);
+const color = {}, RINGS = {};
+ranked.forEach(([d], i) => { color[d] = PALETTE[i % PALETTE.length]; RINGS[d] = 296 - i * 26; });
+
+const svgNS = "http://www.w3.org/2000/svg";
+const S = (tag, attrs) => {
+  const el = document.createElementNS(svgNS, tag);
+  for (const k in attrs) el.setAttribute(k, attrs[k]);
+  return el;
+};
+const P = (r, h) => {
+  const a = (h / 24) * 2 * Math.PI - Math.PI / 2;
+  return [360 + r * Math.cos(a), 360 + r * Math.sin(a)];
+};
+function arcPath(r, h1, h2) {
+  const [x1, y1] = P(r, h1), [x2, y2] = P(r, h2);
+  return `M ${x1} ${y1} A ${r} ${r} 0 0 1 ${x2} ${y2}`;
+}
+const dial = document.getElementById("dial");
+for (const d in RINGS)
+  dial.append(S("circle", { cx: 360, cy: 360, r: RINGS[d], fill: "none", stroke: "var(--dial-guide)", "stroke-width": 1 }));
+for (let h = 0; h < 24; h++) {
+  const [x1, y1] = P(326, h), [x2, y2] = P(h % 6 ? 318 : 310, h);
+  dial.append(S("line", { x1, y1, x2, y2, stroke: h % 6 ? "var(--line)" : "var(--brass-dim)", "stroke-width": h % 6 ? 1 : 1.5 }));
+  if (h % 6 === 0) {
+    const [tx, ty] = P(344, h);
+    const t = S("text", { x: tx, y: ty, "text-anchor": "middle", "dominant-baseline": "middle", fill: "var(--muted)", "font-size": "13", "font-family": "'IBM Plex Mono',monospace" });
+    t.textContent = String(h).padStart(2, "0");
+    dial.append(t);
+  }
+}
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+sessions.forEach((s, i) => {
+  const p = S("path", {
+    d: arcPath(RINGS[s.domain], s.start, s.end),
+    fill: "none", stroke: color[s.domain], "stroke-width": 9, "stroke-linecap": "round",
+  });
+  if (!reduced) {
+    p.style.strokeDasharray = 500;
+    p.style.strokeDashoffset = 500;
+    p.style.transition = `stroke-dashoffset 1s cubic-bezier(.4,0,.2,1) ${i * 0.06}s`;
+    requestAnimationFrame(() => requestAnimationFrame(() => p.style.strokeDashoffset = 0));
+  }
+  dial.append(p);
+});
+{
+  const [x2, y2] = P(306, 18.62);
+  dial.append(S("line", { x1: 360, y1: 360, x2, y2, stroke: "var(--brass)", "stroke-width": 1.5, opacity: .9 }));
+  dial.append(S("circle", { cx: 360, cy: 360, r: 4, fill: "var(--brass)" }));
+  const t1 = S("text", { x: 360, y: 346, "text-anchor": "middle", fill: "var(--ink)", "font-size": "40", "font-family": "Marcellus,Georgia,serif" });
+  t1.textContent = "6h 37m";
+  const t2 = S("text", { x: 360, y: 378, "text-anchor": "middle", fill: "var(--muted)", "font-size": "11", "letter-spacing": "2", "font-family": "'IBM Plex Mono',monospace" });
+  t2.textContent = "FOCUSED TODAY";
+  dial.append(t1, t2);
+}
+
+/* ---------- theme swatches ---------- */
+const THEMES = [
+  ["Noir", "#10141d", "#c9a15a", "#232a3a"],
+  ["Dawn", "#f2ede3", "#a4682a", "#d9cfbb"],
+  ["Sea", "#0c1a1f", "#7fc4b5", "#1d3540"],
+  ["Forest", "#131a12", "#a8b56a", "#263426"],
+];
+const themesEl = document.getElementById("themes");
+for (const [name, bg, accent, line] of THEMES) {
+  const card = document.createElement("div"); card.className = "theme";
+  const sw = document.createElement("div"); sw.className = "sw"; sw.style.background = bg;
+  const r1 = document.createElement("i"); r1.className = "r1"; r1.style.borderColor = line;
+  const r2 = document.createElement("i"); r2.className = "r2"; r2.style.borderColor = accent;
+  const hand = document.createElement("i"); hand.className = "hand"; hand.style.background = accent;
+  sw.append(r1, r2, hand);
+  const nm = document.createElement("div"); nm.className = "nm"; nm.textContent = name;
+  card.append(sw, nm);
+  themesEl.append(card);
+}
+</script>
+</body>
+</html>
